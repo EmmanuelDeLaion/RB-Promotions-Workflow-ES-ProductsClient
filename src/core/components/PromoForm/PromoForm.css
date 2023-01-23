@@ -1,0 +1,338 @@
+/*General*/
+.graySeparator::before
+{
+    background-color: #707070;
+    inset: 0;
+}
+.separatorToTop
+{
+    height: 1px;
+    padding: 0px 0px 8px 0px;
+}
+.verticalPadding
+{
+    padding: 4px 0px 4px 0px;
+}
+/*Pivot*/
+.mainPivot .ms-Pivot, .innerPivot .ms-Pivot
+{
+    height: 44px;;
+}
+.mainPivot .is-selected, .innerPivot .is-selected
+{
+    background-color: #FEF5F9;
+}
+.label
+{
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) var(--unnamed-font-size-16)/var(--unnamed-line-spacing-21) var(--unnamed-font-family-segoe-ui);
+    font-weight: 600;;
+    font-size: 16px/21px;
+    font-family: Segoe UI;
+    color: #000000;
+}
+.labelNotBold
+{
+    font-weight: normal !important;
+}
+/*Modal*/
+.peopleLabel
+{
+    width: 120px;
+}
+.peopleHeaderStyles
+{
+    background-color: #fff7fb !important;
+    color: #ffffff !important;
+    margin-bottom: 2px;
+    width: 100%;
+    /* padding-top: 23px !important;
+    padding-bottom: 23px !important; */
+}
+.ms-Modal-scrollableContent{
+    overflow: visible;
+}
+/*.ms-Dialog-main*/
+.mainModal .ms-Dialog-main
+{
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px !important;
+    min-width: 550px;
+    display: 'flex';
+    flex-Flow: 'column nowrap';
+    align-Items: 'stretch';
+}
+/*Content Section*/
+.statusContainer
+{
+    height: 30px;
+    vertical-align: middle;
+    background-color: #FEF5F9;
+    width: 100%;
+    text-align: right;
+    padding: 8px 16px 0px 0px;
+}
+.statusContainer * {
+    padding-left: 3px;
+}
+.statusContainer i
+{
+    width: 14px;
+}
+
+.deleteProductContainer
+{
+    height: 30px;
+    vertical-align: middle;
+    background-color: #FEF5F9;
+    width: 100%;
+    text-align: right;
+    padding: 2px 16px 0px 0px;
+}
+.deleteProductContainer * {
+    padding-left: 3px;
+}
+.deleteProductContainer i
+{
+    width: 14px;
+    margin-top: 3px;
+    padding-right: 4px !important;
+}
+.grayHeader
+{
+    height: 55px;
+    background: #E1DFDD 0% 0% no-repeat padding-box;
+}
+.grayHeader label
+{
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+.grayContent
+{
+    background: #F3F2F1 0% 0% no-repeat padding-box;
+}
+
+.grayHeaderToGreen, .grayHeaderToGreen .ms-Label
+{
+    background: #125C00 0% 0% no-repeat padding-box;
+    color: white !important;
+}
+.grayHeaderToRed, .grayHeaderToRed .ms-Label
+{
+    background: #AD4146 0% 0% no-repeat padding-box;
+    color: white;
+}
+
+.toRight
+{
+    margin-left: auto !important;
+}
+.smallPadding
+{
+    padding: 4px 0px;
+}
+.mainPadding
+{
+    padding:16px;
+}
+.padding
+{
+    padding: 16px 0px;
+}
+.smallPadding-left
+{
+    padding-left: 4px;
+}
+.smallPadding-right
+{
+    padding-right: 4px;
+}
+.padding-right
+{
+    padding-right: 16px;
+}
+.padding-left
+{
+    padding-left: 16px;
+}
+.padding-bottom
+{
+    padding-bottom: 16px;
+}
+/*Bottom Section*/
+.modalBottom
+{
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0px;
+    height: 90px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px -5px 6px #00000029;
+    opacity: 1;
+    z-index: 9999;
+    padding: 8px 16px;
+}
+.effectiveLabelContainer
+{
+    width: 200px;
+    text-align: right;
+}
+.modalBottom .effectiveLabelContainer
+{
+    text-align: left;
+}
+.twoColumnsContentMaxWidth
+{
+    max-width: 708px;
+}
+.effectiveLabel
+{
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) var(--unnamed-font-size-14)/var(--unnamed-line-spacing-19) var(--unnamed-font-family-segoe-ui);
+    letter-spacing: var(--unnamed-character-spacing-0);
+    text-align: left;
+    font: normal normal normal 14px/19px Segoe UI;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+    background: var(--error-color) 0% 0% no-repeat padding-box;
+    background: #125C00 0% 0% no-repeat padding-box;
+    opacity: 1;
+    padding: 0px 8px 0px 8px;
+
+}
+.notEffectiveLabel
+{
+    background: #AD4146 0% 0% no-repeat padding-box;
+}
+
+.modalBottomContent > div
+{
+    padding: 0px 32px 0px 0px;
+}
+.modalBottomButtonsContainer
+{
+    padding: 0px !important;
+}
+.modalBottomButtonsContainer > div
+{
+    padding: 0px 0px 0px 16px;
+}
+
+.modalBottomContentHeader
+{
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-600) var(--unnamed-font-size-14)/var(--unnamed-line-spacing-19) var(--unnamed-font-family-segoe-ui);
+    letter-spacing: var(--unnamed-character-spacing-0);
+    color: var(--text-color);
+    text-align: left;
+    font: normal normal 600 14px/19px Segoe UI;
+    letter-spacing: 0px;
+}
+.modalBottomContentValue
+{
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) var(--unnamed-font-size-14)/var(--unnamed-line-spacing-19) var(--unnamed-font-family-segoe-ui);
+    letter-spacing: var(--unnamed-character-spacing-0);
+    color: var(--text-color);
+    text-align: left;
+    font: normal normal normal 14px/19px Segoe UI;
+    letter-spacing: 0px;
+}
+.summarySectionContainer
+{
+    min-height: 550px;
+}
+.statusContainer i
+{
+    margin-top:3px;
+}
+.actividadTopadaContainer
+{
+    background: var(--unnamed-color-f3f2f1) 0% 0% no-repeat padding-box;
+    background: #F3F2F1 0% 0% no-repeat padding-box;
+    max-height: 30px;
+}
+.grayHeader i
+{
+    margin-top: 5px;
+    padding-right: 4px !important;
+}
+.actividadTopadaToggle
+{
+    padding-top: 5px;
+}
+.preAnalisisPadding
+{
+    padding-top: 14px;
+}
+.controlPadding
+{
+    min-height: 82px;
+}
+
+.detailsControlPadding
+{
+    min-height: 36px !important;
+}
+.multilineControlPadding
+{
+    min-height: 114px;
+}
+.mainModal .fixedStructure
+{
+flex-basis: 0;
+}
+.grayBorderLeft
+{
+    border-left: 1px solid #575554;
+}
+.noMarginBottom
+{
+    margin-bottom: 0px;
+}
+
+.errorMessage {
+    color: rgb(164, 38, 44);
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 12px;
+    font-weight: 400;
+    padding-top: 5px;
+}
+
+.datePickerError .ms-DatePicker .ms-TextField-fieldGroup {
+    border: 1px solid rgb(164, 38, 44);
+}
+.workflowCommentsModal .controlPadding
+{
+    min-height: 165px;
+}
+.workflowCommentsModal .ms-Dialog-main
+{
+    width: 700px;
+    max-width: initial;
+}
+.pivotInvalid .ms-Pivot-text
+{
+    color: #a4262c !important;
+    text-decoration: underline !important;
+}
+.borderBottom
+{
+    border-bottom: 1px solid #707070;
+}
+.workflowIcon{
+    font-size: 25px;
+    padding: 10px;
+}
+.controlPadding > .ms-TextField
+{
+    width: 100%;
+}
+.alignMiddle{
+    align-items: center;
+}
+
+.evidenceSectionContainer
+{
+    min-height: 350px;
+}

@@ -29,7 +29,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "src/core/components/PromoForm/PromoForm.tsx"
   ],
   "exclude": [
     "node_modules",

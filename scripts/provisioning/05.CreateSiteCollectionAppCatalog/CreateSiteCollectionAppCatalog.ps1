@@ -1,0 +1,1 @@
+Add-PnPSiteCollectionAppCatalog -Site $siteUrl

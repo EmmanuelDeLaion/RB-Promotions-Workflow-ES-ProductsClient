@@ -1,6 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "eebaa411-ef94-4570-aafe-5b9076ea1d84",
+  // "id": "eebaa411-ef94-4570-aafe-5b9076ea1d84",
+  // "id": "43273a81-bc29-4ff0-9585-3bdd5acd3ade",
+  "id": "10bae1b1-071e-4a8a-a0de-3f0bb1e73f59",
   "alias": "PromoFormWebPartWebPart",
   "componentType": "WebPart",
 

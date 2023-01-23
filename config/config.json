@@ -7,12 +7,17 @@
         {
           "entrypoint": "./lib/webparts/promoFormWebPart/PromoFormWebPartWebPart.js",
           "manifest": "./src/webparts/promoFormWebPart/PromoFormWebPartWebPart.manifest.json"
+        },
+        {
+          "entrypoint": "./lib/extensions/promoListViewLink/PromoListViewLinkFieldCustomizer.js",
+          "manifest": "./src/extensions/promoListViewLink/PromoListViewLinkFieldCustomizer.manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "PromoFormWebPartWebPartStrings": "lib/webparts/promoFormWebPart/loc/{locale}.js"
+    "PromoFormWebPartWebPartStrings": "lib/webparts/promoFormWebPart/loc/es-mx.js",
+    "PromoListViewLinkFieldCustomizerStrings": "lib/extensions/promoListViewLink/loc/en-us.js"
   }
 }

@@ -1,0 +1,19 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.promoForm{
+    min-width: 700px;
+
+    .successMessageContainer{
+        text-align: center;
+        padding: 10px 20px;
+    }
+
+    .errorMessageContainer {
+        @extend .successMessageContainer;
+        text-align: left;
+    }
+
+    .readOnlyInput input {
+        background-color: rgb(254, 245, 249);
+    }
+}

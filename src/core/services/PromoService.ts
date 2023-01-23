@@ -1,29 +1,44 @@
-import { Promo } from "../model/Promo";
-import { sp } from "@pnp/sp/presets/all";
+import { Promo } from "../model/Promo/Promo";
+import { PromoViewModel } from "../model/Promo/PromoViewModel";
+import { PromoRepository } from "../data/PromoRepository";
+import { TypeRepository } from "../data/TypeRepository";
+import { Type } from "../model/Common";
+import { ConfigurationRepository } from "../data";
+import { PromoEvidence } from "../model/Promo/PromoEvidence";
+import { EvidenceRepository } from "../data/EvidenceRepository";
 
-export class PromoService {
-    static LIST_NAME: string = "Promociones";
+export class PromoService { 
 
-    //TODO: Revisar si hay que mejorar los mensajes de error
-    public static GetById(id: number): Promise<Promo> {
-      const entity = sp.web.lists.getByTitle(PromoService.LIST_NAME)
-        .items.getById(id).fieldValuesAsText.get().then((item) => {      
-          return PromoService.BuildEntity(item);
-        }, (error) => {
-          console.error(error.message);
-        });
+  private static async GetPromo(itemId?: number): Promise<Promo> {
+    return itemId ? await PromoRepository.GetById(itemId)
+                  : await PromoRepository.GetNewPromo();
+  }
 
-      return entity;
-    }
+  public static async GetViewModel(itemId?: number): Promise<PromoViewModel> {
+    return (await this.GetPromo(itemId)).GetViewModel();
+  }
 
-    static BuildEntity(item: any): Promo {
-      let entity = new Promo();
+  public static async Save(entity: Promo): Promise<void> {
+    return await (await this.GetPromo(entity.ItemId)).Save(entity);
+  }
 
-      entity.ItemId = item.ID;
-      entity.PromoID = item.PromoID;
-      entity.Name = item.Title;
-      entity.Description = item.Description;
+  public static async Submit(entity: Promo): Promise<void> {
+    return await (await this.GetPromo(entity.ItemId)).Submit(entity);
+  }
 
-      return entity;
-    }
+  public static async Approve(entity: Promo, comments: string): Promise<void> {
+    return await (await this.GetPromo(entity.ItemId)).Approve(comments);
+  }
+
+  public static async Reject(entity: Promo, comments: string): Promise<void> {
+    return await (await this.GetPromo(entity.ItemId)).Reject(comments);
+  }
+
+  public static async GetTypesByCategory(categoryId: number): Promise<Type[]> {
+    return await TypeRepository.GetByCategory(categoryId);
+  }
+
+  public static async UpdateEvidence(promoID: string, evidence: PromoEvidence[]): Promise<void> {
+    return await EvidenceRepository.UpdateEvidence(promoID, evidence);
+  }
 }

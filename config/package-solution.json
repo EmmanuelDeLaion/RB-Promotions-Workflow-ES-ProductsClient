@@ -1,13 +1,22 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "rb-workflow-promociones-client-side-solution",
-    "id": "46966589-82f7-457e-9b9d-68325a5c982c",
-    "version": "1.0.0.0",
+    "name": "RB Promotions Workflow - ES",
+    // "id": "eef21d1f-8723-494b-8bfe-01a33bc4b317",
+    "id": "85ad62de-e162-4771-9fdc-ddc09ef4abfe",
+    "version": "1.0.0.550",
     "includeClientSideAssets": true,
-    "isDomainIsolated": false
+    "isDomainIsolated": false,
+    "iconPath": "images/appIcon.png",
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": ""
+    }
   },
   "paths": {
-    "zippedPackage": "solution/rb-workflow-promociones.sppkg"
+    "zippedPackage": "solution/rb-promotions-workflow.sppkg"
   }
 }

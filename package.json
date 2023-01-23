@@ -7,12 +7,18 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "serve": "gulp serve",
+    "serve-sgiovannini": "gulp serve --config=sgiovannini",
+    "serve-promoListViewLink": "gulp serve --config=promoListViewLink",
     "build": "gulp bundle",
     "clean": "gulp clean",
-    "test": "gulp test"
+    "test": "gulp test",
+    "build-package": "gulp bundle && gulp package-solution",
+    "build-package-production": "gulp clean && gulp bundle --ship && gulp package-solution --ship"
   },
   "dependencies": {
     "@microsoft/sp-core-library": "1.11.0",
+    "@microsoft/sp-dialog": "1.11.0",
     "@microsoft/sp-lodash-subset": "1.11.0",
     "@microsoft/sp-office-ui-fabric-core": "1.11.0",
     "@microsoft/sp-property-pane": "1.11.0",
@@ -22,9 +28,14 @@
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
     "@types/webpack-env": "1.13.1",
-    "office-ui-fabric-react": "6.189.2",
+    "office-ui-fabric-react": "^7.0.0",
     "react": "16.8.5",
-    "react-dom": "16.8.5"
+    "react-dom": "16.8.5",
+    "react-select": "^3.1.1",
+    "@fluentui/react-tabs": "^0.6.21",
+    "@uifabric/example-data": "^7.1.5",
+    "@microsoft/decorators": "1.11.0",
+    "@microsoft/sp-listview-extensibility": "1.11.0"
   },
   "resolutions": {
     "@types/react": "16.8.8"
@@ -38,6 +49,10 @@
     "@types/chai": "3.4.34",
     "@types/mocha": "2.2.38",
     "ajv": "~5.2.2",
-    "gulp": "3.9.1"
+    "gulp": "~3.9.1",
+    "@types/react": "16.8.8",
+    "@types/react-dom": "16.8.3",
+    "@types/webpack-env": "1.13.1",
+    "@types/es6-promise": "0.0.33"
   }
 }
