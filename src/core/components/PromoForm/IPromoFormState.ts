@@ -1,5 +1,5 @@
 import { ActionConfirmationType } from "../../infrastructure";
-import { Product } from "../../model/Common";
+import { ClientProduct } from "../../model/Common";
 import { PromoViewModel } from "../../model/Promo/PromoViewModel";
 
 export interface IPromoFormState {
@@ -12,7 +12,7 @@ export interface IPromoFormState {
     errorMessage?: string; 
     selectedIndex: number;
     loadingTypes: boolean;
-    filteredProducts: Product[];
+    filteredProducts: ClientProduct[];
     actionsComments?: string;
 
     evidenceDescription?:string;
@@ -30,4 +30,6 @@ export interface IPromoFormState {
     actionConfirmationDialogType?: ActionConfirmationType;
     enableActionValidation: boolean;
     promotionTitle: string;
+    CopiarPromo: boolean;
+    currentUser: String
 }

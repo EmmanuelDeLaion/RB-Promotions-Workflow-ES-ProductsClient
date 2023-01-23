@@ -4,16 +4,17 @@ import { ConfigurationKey} from "../infrastructure/Configuration/ConfigurationKe
 import { Configuration} from "../infrastructure/Configuration/Configuration";
 import { CommonHelper } from "../common/CommonHelper";
 import { Constants } from "../Constants";
+import * as strings from 'PromoFormWebPartWebPartStrings';
 
 export class ConfigurationRepository {
-    private static LIST_NAME: string = "Configuración";
+    private static LIST_NAME: string = strings.LIST_Configuration; //Configuración
     private static _instance : Configuration;
 
     public static async GetInstance(): Promise<Configuration> {
-        
+
         if(ConfigurationRepository._instance == null)
             ConfigurationRepository._instance = await ConfigurationRepository.GetConfiguration();
-        
+
         return ConfigurationRepository._instance;
     }
 
@@ -27,13 +28,13 @@ export class ConfigurationRepository {
                 configuration.ApprovalAmountLimit = ConfigurationRepository.GetNumberConfigurationValue(items, ConfigurationKey.ApprovalAmountLimit);
                 configuration.KAMsGroupName = Constants.Groups.KAMsBaseGroupName + " - " + configuration.CountryCode;
                 configuration.ReadOnlyGroupName = Constants.Groups.ReadOnlyBaseGroupName + " - " + configuration.CountryCode;
-                
+
                 return configuration;
             });
-  
+
         return entity;
     }
-    
+
     private static GetNumberConfigurationValue(items: ConfigurationItem[], key: ConfigurationKey): number
     {
         let value = ConfigurationRepository.GetConfigurationValue(items, key);
@@ -46,7 +47,7 @@ export class ConfigurationRepository {
         let configurationItem = items.filter(x => x.Key.toLowerCase() === key.toLowerCase())[0];
 
         if(configurationItem == null)
-        {            
+        {
             console.log("Configuration item for key '%s' not found.", key);
             return null;
         }
@@ -61,11 +62,11 @@ export class ConfigurationRepository {
     {
         const collection = sp.web.lists.getByTitle(ConfigurationRepository.LIST_NAME)
             .items.select(
-                "ID", 
-                "Title", 
-                "Value", 
-            ).getAll().then((items) => { 
-                return items.map((item) => {                     
+                "ID",
+                "Title",
+                "Value",
+            ).getAll().then((items) => {
+                return items.map((item) => {
                     return ConfigurationRepository.BuildEntity(item);
                 });
             });
@@ -76,7 +77,7 @@ export class ConfigurationRepository {
     private static BuildEntity(item: any): ConfigurationItem {
 
         let entity = new ConfigurationItem();
-  
+
         entity.ItemId = item.ID;
         entity.Key = item.Title;
         entity.Value = item.Value;

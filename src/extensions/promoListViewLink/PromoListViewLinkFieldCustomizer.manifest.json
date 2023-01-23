@@ -1,7 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
 
-  "id": "e710acda-bc0c-4695-8390-5229e3fc8eaf",
+  // "id": "e710acda-bc0c-4695-8390-5229e3fc8eaf",
+  // "id": "4ed10681-c755-4ed9-adba-c7cbb9d8542a",
+  "id": "afecc168-4f0d-476d-8e75-2782b7257c34",
   "alias": "PromoListViewLinkFieldCustomizer",
   "componentType": "Extension",
   "extensionType": "FieldCustomizer",

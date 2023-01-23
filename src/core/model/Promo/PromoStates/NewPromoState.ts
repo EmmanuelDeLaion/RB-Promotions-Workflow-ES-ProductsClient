@@ -12,6 +12,7 @@ import { PromoStatus } from "../PromoStatus";
 import { PromoViewModel } from "../PromoViewModel";
 import { PromoState } from "./PromoState";
 import { NotificacionsManager } from '../../../common/NotificacionsManager';
+import { ClientProductRepository } from "../../../data/ClientProductRepository";
 
 export class NewPromoState extends PromoState {
     public GetStatusId(): number {
@@ -27,8 +28,9 @@ export class NewPromoState extends PromoState {
 
         viewModel.Clients = await ClientRepository.GetClients();
         viewModel.Categories = await CategoryRepository.GetAll();
-        viewModel.Products = await ProductRepository.GetAll();
-
+        viewModel.ClientProducts = await ClientProductRepository.GetAll();
+        //viewModel.Products = await ProductRepository.GetAll();
+        
         viewModel.ShowSaveButton = true;
         viewModel.ShowSubmitButton = true;
 

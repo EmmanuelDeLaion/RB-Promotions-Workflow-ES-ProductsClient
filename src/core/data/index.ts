@@ -6,3 +6,4 @@ export * from './TypeRepository';
 export * from './PromoItemRepository';
 export * from './ProductRepository';
 export * from './ConfigurationRepository';
+export * from './ClientProductRepository';

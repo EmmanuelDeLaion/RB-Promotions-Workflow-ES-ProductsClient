@@ -24,7 +24,7 @@
 }
 .label
 {
-    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) var(--unnamed-font-size-16)/var(--unnamed-line-spacing-21) var(--unnamed-font-family-segoe-ui);   
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) var(--unnamed-font-size-16)/var(--unnamed-line-spacing-21) var(--unnamed-font-family-segoe-ui);
     font-weight: 600;;
     font-size: 16px/21px;
     font-family: Segoe UI;
@@ -175,12 +175,12 @@
 }
 .effectiveLabelContainer
 {
-    width: 100px;
+    width: 200px;
     text-align: right;
 }
 .modalBottom .effectiveLabelContainer
 {
-    text-align: left; 
+    text-align: left;
 }
 .twoColumnsContentMaxWidth
 {
@@ -258,7 +258,7 @@
 }
 .actividadTopadaToggle
 {
-    padding-top: 5px;    
+    padding-top: 5px;
 }
 .preAnalisisPadding
 {

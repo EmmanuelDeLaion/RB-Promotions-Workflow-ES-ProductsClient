@@ -2,8 +2,8 @@ import * as React from "react";
 import { ExtensionContext } from "@microsoft/sp-extension-base";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { PromoFormDialog } from '.';
-import { Stack, 
-        getTheme, 
+import { Stack,
+        getTheme,
         PrimaryButton} from "office-ui-fabric-react";
 import { CommonHelper } from "../../common/CommonHelper";
 
@@ -11,6 +11,9 @@ import { initializeTheme } from './Theme';
 import { SecurityHelper } from "../../common";
 import { Constants } from "../../Constants";
 import { ClientRepository, ConfigurationRepository } from "../../data";
+import * as strings from 'PromoFormWebPartWebPartStrings';
+
+
 initializeTheme();
 const theme = getTheme();
 
@@ -65,7 +68,7 @@ export class PromoFormLink extends React.Component<IPromoFormLinkProps, IPromoFo
 
         ConfigurationRepository.GetInstance().then((config) => {
             SecurityHelper.GetCurrentUser().then((user) => {
-                SecurityHelper.UserIsMemberOfGroup(user.ItemId, config.KAMsGroupName).then((isMember) => {                
+                SecurityHelper.UserIsMemberOfGroup(user.ItemId, config.KAMsGroupName).then((isMember) => {
                     if(isMember) {
                         ClientRepository.UserIsKAM(user.ItemId).then((isKAM) => {
                             this.setState({showButton: isKAM});
@@ -77,7 +80,7 @@ export class PromoFormLink extends React.Component<IPromoFormLinkProps, IPromoFo
     }
 
     public render(): React.ReactElement<IPromoFormLinkProps> {
-        var output = 
+        var output =
             <Stack style={this.mainStakStyles}>
                 <Stack verticalFill verticalAlign="start">
                     <span style={this.headerStyles}>TPM – Trade Promotions Management</span>
@@ -85,11 +88,11 @@ export class PromoFormLink extends React.Component<IPromoFormLinkProps, IPromoFo
                 </Stack>
                 <Stack verticalAlign="end" horizontal>
                     <div hidden={!this.state.showButton}>
-                        <PrimaryButton 
-                            onClick={() => this.openPromoFormDialog()} 
-                            style={this.openPromotionButtonStyles} 
-                            text="Nueva promoción" 
-                            title="Nueva promoción" />
+                        <PrimaryButton
+                            onClick={() => this.openPromoFormDialog()}
+                            style={this.openPromotionButtonStyles}
+                            text={strings.NewPromotion}
+                            title={strings.NewPromotion} />
                     </div>
                 </Stack>
             </Stack>;

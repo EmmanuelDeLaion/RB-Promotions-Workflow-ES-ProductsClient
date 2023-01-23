@@ -1,6 +1,6 @@
 import { CommonHelper } from "../../common/CommonHelper";
 import { Entity, LookupValue } from "../../infrastructure";
-import { Category, CategoryType, Product, Type } from "../Common";
+import { Category, CategoryType, ClientProduct, Product, Type } from "../Common";
 import { LastYearVolumes } from "../Common/LastYearVolumes";
 
 export class PromoItem extends Entity {
@@ -13,7 +13,9 @@ export class PromoItem extends Entity {
     public BusinessUnit: LookupValue;
     public Brand: LookupValue;
     public ProductCategory: LookupValue;
+    public ClientProduct: ClientProduct;
     public Product: Product;
+    //public SKUNumber: string;
     public StartDate: Date;
     public EndDate: Date;
     public DiscountPerPiece?: number = null;
@@ -23,6 +25,7 @@ export class PromoItem extends Entity {
     public BaseVolume: number;
     public EstimatedIncrementalVolume: number;
     public AdditionalInvestment: number;
+    public Client: LookupValue;
 
     public LastYearVolumes: LastYearVolumes;
     public GetBaseGMSum?: (category: CategoryType) => number;
@@ -362,7 +365,7 @@ export class PromoItem extends Entity {
     public GetDiscountPerPieceAsString():string {
         return this.DiscountPerPiece != null ? this.DiscountPerPiece.toString() : "";
     }
-
+        
     public GetNetPriceAsString():string {
         return this.NetPrice != null ? this.NetPrice.toFixed(2) : "0.00";
     }
@@ -444,38 +447,38 @@ export class PromoItem extends Entity {
 
     public GetBaseNRAsString(): string {
         const value = this.GetBaseNR();
-        return value != null ? value.toFixed(2) : null;
+        return value != null ? value.toLocaleString() : null;
     }
 
     public GetEstimatedNRAsString(): string {
         const value = this.GetEstimatedNR();
-        return value != null ? value.toFixed(2) : null;
+        return value != null ? value.toLocaleString() : null;
     }
 
     public GetIncrementalEstimatedNRAsString(): string {
         const value = this.GetIncrementalEstimatedNR();
-        return value != null ? value.toFixed(2) : null;
+        return value != null ? value.toLocaleString() : null;
     }
 
     public GetBaseGMAsString(): string {
         const value = this.GetBaseGM();
-        return value != null ? value.toFixed(2) :  null;
+        return value != null ? value.toLocaleString() :  null;
     }
 
     public GetEstimatedGMPromoAsString(): string {
         const value = this.GetEstimatedGMPromo();
-        return value != null ? value.toFixed(2) :  null;
+        return value != null ? value.toLocaleString() :  null;
     }
 
     public GetIncrementalGMAsString(): string {
         const value = this.GetIncrementalGM();
-        return value != null ? value.toFixed(2) :  null;
+        return value != null ? value.toLocaleString() :  null;
     }
 
     public GetEstimatedInvestmentAsString(): string {
-        const value = this.GetEstimatedInvestment();
+        const value = this.GetEstimatedInvestment().toLocaleString();
 
-        return value != null ? value.toFixed(2) : null;
+        return value != null ? value.toLocaleString() : null;
     }
 
     public GetROIAsString(): string {
@@ -494,8 +497,10 @@ export class PromoItem extends Entity {
         if (this.Type == null) invalidCount++;
         if (this.BusinessUnit == null) invalidCount++;
         if (this.Brand == null) invalidCount++;
-        if (this.Product == null) invalidCount++;
+        //if (this.Product == null) invalidCount++;
+        if (this.ClientProduct == null) invalidCount++;
         if (this.ProductCategory == null) invalidCount++;
+        //if (this.Client == null) invalidCount++;
         if (!CommonHelper.IsDate(this.StartDate)) invalidCount++;
         if (!CommonHelper.IsDate(this.EndDate)) invalidCount++;
         if (this.RequiresDiscountPerPiece() && !(this.DiscountPerPiece > 0)) invalidCount++;

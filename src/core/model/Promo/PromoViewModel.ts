@@ -1,5 +1,7 @@
-import { Category, Client, Product, Type } from "../Common";
+import { Category, Client, ClientProduct, Product, Type } from "../Common";
 import { Promo } from "./Promo";
+import * as strings from 'PromoFormWebPartWebPartStrings';
+
 
 export class PromoViewModel {
     public Entity: Promo;
@@ -16,7 +18,8 @@ export class PromoViewModel {
     public Clients: Client[];
     public Categories: Category[];
     public Types: Type[];
-    public Products: Product[];
+    //public Products: Product[];
+    public ClientProducts : ClientProduct[];
 
     //#endregion
 
@@ -24,7 +27,7 @@ export class PromoViewModel {
         if(this.Entity != null && this.Entity.Name && this.Entity.Client != null)
             return this.Entity.Client.Name + " - " + this.Entity.Name;
 
-        return "Nueva promoción";
+        return strings.NewPromotion;
     }
 
     public ShowSaveButton: boolean;

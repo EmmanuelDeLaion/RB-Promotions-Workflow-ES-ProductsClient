@@ -17,7 +17,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "PromoFormWebPartWebPartStrings": "lib/webparts/promoFormWebPart/loc/{locale}.js",
-    "PromoListViewLinkFieldCustomizerStrings": "lib/extensions/promoListViewLink/loc/{locale}.js"
+    "PromoFormWebPartWebPartStrings": "lib/webparts/promoFormWebPart/loc/es-mx.js",
+    "PromoListViewLinkFieldCustomizerStrings": "lib/extensions/promoListViewLink/loc/en-us.js"
   }
 }

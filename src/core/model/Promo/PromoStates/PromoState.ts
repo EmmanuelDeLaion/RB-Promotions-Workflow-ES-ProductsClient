@@ -4,7 +4,7 @@ import { Promo } from "../Promo";
 import { PromoViewModel } from "../PromoViewModel";
 import { PromoWorkflowState } from "../PromoWorkflowState";
 
-export abstract class PromoState {    
+export abstract class PromoState {
     public Entity:Promo;
 
     public abstract GetStatusId():number;
@@ -18,7 +18,7 @@ export abstract class PromoState {
     public async Save(entity: Promo): Promise<void>
     {
         throw new Error(Constants.Messages.NotAllowedAction);
-    }    
+    }
 
     public Submit(entity: Promo): Promise<void>
     {
@@ -32,7 +32,8 @@ export abstract class PromoState {
 
     public Reject(comments: string): Promise<void>
     {
-        throw new Error(Constants.Messages.NotAllowedAction);
+        return;
+        //throw new Error(Constants.Messages.NotAllowedAction);
     }
 
     public async InitializeWorkflowState(entity: Promo): Promise<void> {

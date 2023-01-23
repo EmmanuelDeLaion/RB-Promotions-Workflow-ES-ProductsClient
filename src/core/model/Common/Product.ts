@@ -6,6 +6,7 @@ export class Product extends Entity {
     public BusinessUnit: LookupValue;
     public Category: LookupValue;
     public Brand: LookupValue;
+    //public Clientes: LookupValue;
 
     public constructor(init?:Partial<Product>) {
         super();

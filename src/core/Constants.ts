@@ -1,17 +1,19 @@
 import { IDatePickerStrings } from "office-ui-fabric-react";
+import * as strings from 'PromoFormWebPartWebPartStrings';
+
 
 export namespace Constants {
     export class StatusTexts{
-        public static NewPromo = "Nueva promoción";
-        public static DraftPromo = "Borrador";
-        public static Approval = "Aprobación";
-        public static Approved = "Aprobada";
-        public static Rejected = "Rechazada";
-    } 
-    
+        public static NewPromo = strings.NewPromotion; //Nueva promoción
+        public static DraftPromo = strings.Draft; //Borrador
+        public static Approval = strings.InApprovalProcess; //Aprobación
+        public static Approved = strings.Approved; //Aprobada
+        public static Rejected = strings.Rejected; //Rechazada
+    }
+
     export class Messages {
-        public static NotAllowedAction = "Esta acción no está permitida debido al estado actual de la promoción";
-        public static RequiredField:string = "Este campo es requerido.";
+        public static NotAllowedAction = strings.ActionNotAllowed;
+        public static RequiredField:string = strings.FieldRequired;
     }
 
     export class Groups {
@@ -22,38 +24,67 @@ export namespace Constants {
     export class Miscellaneous{
         public static DayPickerStrings: IDatePickerStrings = {
             months: [
-              'Enero',
-              'Febrero',
-              'Marzo',
-              'Abril',
-              'Mayo',
-              'Junio',
-              'Julio',
-              'Agosto',
-              'Septiembre',
-              'Octubre',
-              'Noviembre',
-              'Diciembre',
+              strings.January,
+              strings.February,
+              strings.March,
+              strings.April,
+              strings.May,
+              strings.June,
+              strings.July,
+              strings.August,
+              strings.September,
+              strings.Octuber,
+              strings.November,
+              strings.December
             ],
-          
-            shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-          
-            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-          
-            shortDays: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-          
-            goToToday: 'Ir a hoy',
-            prevMonthAriaLabel: 'Ir al mes anterior',
-            nextMonthAriaLabel: 'Ir al mes siguiente',
-            prevYearAriaLabel: 'Ir al año anterior',
-            nextYearAriaLabel: 'Ir al año siguiente',
+
+            shortMonths: [
+              strings.Jan,
+              strings.Feb,
+              strings.Mar,
+              strings.Apr,
+              strings.May,
+              strings.Jun,
+              strings.Jul,
+              strings.Aug,
+              strings.Sep,
+              strings.Oct,
+              strings.Nov,
+              strings.Dec
+            ],
+
+            days: [
+              strings.Sunday,
+              strings.Monday,
+              strings.Tuesday,
+              strings.Wednesday,
+              strings.Thursday,
+              strings.Friday,
+              strings.Saturday
+            ],
+
+            shortDays: [
+              strings.DS,
+              strings.DM,
+              strings.DT,
+              strings.DW,
+              strings.DT,
+              strings.DF,
+              strings.DS
+            ],
+
+            goToToday: strings.GoToToday,
+            prevMonthAriaLabel: strings.GoToThePreviousMonth,
+            nextMonthAriaLabel: strings.GoToTheNextMonth,
+            prevYearAriaLabel: strings.GoToThePreviousYear,
+            nextYearAriaLabel: strings.GoToTheNextYear,
             closeButtonAriaLabel: 'Cerrar',
 
-            isRequiredErrorMessage: 'Este campo es requerido.',
+            isRequiredErrorMessage: strings.FieldRequired,
 
-            invalidInputErrorMessage: 'Formato de fecha inválido.'
+            invalidInputErrorMessage: strings.InvalidDateFormat
         };
 
-        public static ClearSelectionText = "--- Borrar selección ---";        
+        public static ClearSelectionText = strings.DeleteSelection;
     }
 }

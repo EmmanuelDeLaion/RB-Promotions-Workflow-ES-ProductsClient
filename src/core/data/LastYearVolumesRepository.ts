@@ -1,13 +1,14 @@
 import { sp } from "@pnp/sp/presets/all";
 import { LastYearVolumes } from "../model/Common/LastYearVolumes";
+import * as strings from 'PromoFormWebPartWebPartStrings';
 
 export class LastYearVolumesRepository {
-    private static LIST_NAME: string = "Volúmenes del último año";
+    private static LIST_NAME: string = strings.LIST_LastYearVolumes; //Volúmenes del último año
 
     public static GetByClientAndProduct(clientId: number, productId: number): Promise<LastYearVolumes> {
         const result = sp.web.lists.getByTitle(LastYearVolumesRepository.LIST_NAME)
           .items.select(
-                "ID", 
+                "ID",
                 "Volume01",
                 "Volume02",
                 "Volume03",
@@ -20,16 +21,16 @@ export class LastYearVolumesRepository {
                 "Volume10",
                 "Volume11",
                 "Volume12",
-            ).filter(`ClientId eq ${clientId} and ProductId eq ${productId}`).get().then((items) => {      
+            ).filter(`ClientId eq ${clientId} and ProductId eq ${productId}`).get().then((items) => {
                 return items.length > 0 ? LastYearVolumesRepository.BuildEntity(items[0]) : null;
             });
-  
+
         return result;
     }
 
     private static BuildEntity(item: any): LastYearVolumes {
         let entity = new LastYearVolumes();
-  
+
         entity.ItemId = item.ID;
         entity.Volumes[0] = item.Volume01;
         entity.Volumes[1] = item.Volume02;

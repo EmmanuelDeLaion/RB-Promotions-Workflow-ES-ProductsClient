@@ -81,8 +81,6 @@
                 <FieldRef Name="EstimatedROI" />
                 <FieldRef Name="TotalEstimatedVolume" />
                 <FieldRef Name="EstimatedInvestment" />
-                <!-- New Fields  -->
-                <FieldRef Name="SKUProduct" />
               </ViewFields>
               <RowLimit Paged="TRUE">30</RowLimit>
               <Aggregations Value="Off" />
@@ -121,9 +119,6 @@
             <Field Type="Lookup" DisplayName="Categoría" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Categorías de producto}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{6a793df2-0a6d-44ee-8ff1-b0d2196b0d09}" SourceID="{{listid:Promo items}}" StaticName="ProductCategory" Name="ProductCategory" ColName="int7" RowOrdinal="0" Version="1" />
             <Field ClientSideComponentId="00000000-0000-0000-0000-000000000000" CommaSeparator="TRUE" Decimals="1" DisplayName="Total volumen estimado" Format="Dropdown" Name="TotalEstimatedVolume" Percentage="FALSE" Title="Total volumen estimado" Type="Number" ID="{a6cf8c86-391b-46dd-917d-6a94aa0f298d}" Version="2" StaticName="TotalEstimatedVolume" SourceID="{{listid:Promo items}}" ColName="float15" RowOrdinal="0" />
             <Field ClientSideComponentId="00000000-0000-0000-0000-000000000000" CommaSeparator="TRUE" Decimals="2" DisplayName="Inversion estimada" Format="Dropdown" Name="EstimatedInvestment" Percentage="FALSE" Title="Inversion estimada" Type="Number" ID="{49fab227-f881-4de3-bfa2-c990f5734ffd}" Version="2" StaticName="EstimatedInvestment" SourceID="{{listid:Promo items}}" ColName="float16" RowOrdinal="0" />
-            <!-- New Fields  -->
-            <Field Type="Lookup" DisplayName="SKUProduct" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Productos por cliente}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{3edf0977-4d95-4fc2-938e-067a28a99aec}" SourceID="{{listid:Promo items}}" StaticName="SKUProduct" Name="SKUProduct" ColName="int3" RowOrdinal="0" Version="1" />
-
           </pnp:Fields>
         </pnp:ListInstance>
         <pnp:ListInstance Title="Promociones" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/Promotions" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/Promotions/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/Promotions/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/Promotions/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
@@ -2295,12 +2290,6 @@
                 <FieldRef Name="Product" />
                 <FieldRef Name="Price" />
                 <FieldRef Name="COGS" />
-                <!-- New Fields  -->
-                <FieldRef Name="SKUDescription" />
-                <FieldRef Name="EAN" />
-                <FieldRef Name="BusinessUnit" />
-                <FieldRef Name="Brand" />
-                <FieldRef Name="ProductCategory" />
               </ViewFields>
               <RowLimit Paged="TRUE">30</RowLimit>
               <JSLink>clienttemplates.js</JSLink>
@@ -2312,13 +2301,6 @@
             <Field ClientSideComponentId="00000000-0000-0000-0000-000000000000" CommaSeparator="TRUE" Decimals="5" DisplayName="COGS" Format="Dropdown" Name="COGS" Percentage="FALSE" Required="TRUE" Title="COGS" Type="Number" ID="{624a5d33-05e2-449e-9e97-c2ef4986acb7}" Version="2" StaticName="COGS" SourceID="{{listid:Productos por cliente}}" ColName="float2" RowOrdinal="0" />
             <Field Type="Lookup" DisplayName="Cliente" Required="TRUE" EnforceUniqueValues="FALSE" List="{listid:Clientes}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{17047afc-3142-443e-bbd5-156b9d957ba4}" SourceID="{{listid:Productos por cliente}}" StaticName="Client" Name="Client" ColName="int1" RowOrdinal="0" Version="1" />
             <Field Type="Lookup" DisplayName="Producto" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Productos}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{c17defe6-fa1f-478b-b6bf-846afbc5e9b9}" SourceID="{{listid:Productos por cliente}}" StaticName="Product" Name="Product" ColName="int2" RowOrdinal="0" Version="1" />
-            <!-- New Fields  -->
-            <Field ClientSideComponentId="00000000-0000-0000-0000-000000000000" DisplayName="Descripción SKU" Format="Dropdown" MaxLength="255" Name="SKUDescription" Title="Descripción SKU" Type="Text" ID="{dabcecf7-ecbc-470c-8155-25e9c8cd610d}" Version="2" StaticName="SKUDescription" SourceID="{{listid:Productos por cliente}}" ColName="nvarchar4" RowOrdinal="0" />
-            <Field Type="Number" DisplayName="EAN" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{f550aa2f-080f-485c-885f-013fac4aeacc}" SourceID="{{listid:Productos por cliente}}" StaticName="EAN" Name="EAN" ColName="float1" RowOrdinal="0" />
-            <Field Type="Lookup" DisplayName="BU" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Unidades de negocio}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{4f30f624-3c83-4c4f-8d75-f72788f55df2}" SourceID="{{listid:Productos por cliente}}" StaticName="BusinessUnit" Name="BusinessUnit" ColName="int1" RowOrdinal="0" Group="" Version="1" />
-            <Field Type="Lookup" DisplayName="Marca" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Marcas}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{12235319-5622-48b4-8363-0196595b27cf}" SourceID="{{listid:Productos por cliente}}" StaticName="Brand" Name="Brand" ColName="int2" RowOrdinal="0" Version="1" />
-            <Field Type="Lookup" DisplayName="Categoría" Required="FALSE" EnforceUniqueValues="FALSE" List="{listid:Categorías de producto}" ShowField="Title" UnlimitedLengthInDocumentLibrary="FALSE" ID="{b42d2b54-e0f9-4c1d-9e46-791ca1e9ea41}" SourceID="{{listid:Productos por cliente}}" StaticName="ProductCategory" Name="ProductCategory" ColName="int3" RowOrdinal="0" Version="1" />
-
           </pnp:Fields>
           <pnp:DataRows UpdateBehavior="Overwrite">
             <pnp:DataRow>

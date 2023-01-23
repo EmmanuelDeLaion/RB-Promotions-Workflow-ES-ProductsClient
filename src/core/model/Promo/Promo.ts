@@ -1,5 +1,5 @@
 import { Entity } from "../../infrastructure";
-import { CategoryType, Client, WorkflowLog } from "../Common";
+import { CategoryType, Client, ClientProduct, WorkflowLog } from "../Common";
 import { NewPromoState, PromoState, DraftPromoState } from "./PromoStates";
 import { PromoStatus, PromoViewModel } from "./";
 import { PromoItem } from "./PromoItem";
@@ -17,24 +17,26 @@ export class Promo extends Entity {
     public ActivityObjective: string = "";
     public Client: Client;
     public Items: PromoItem[];
+    public ItemsToDelete?: number[]; //Array de PromoItems a eliminar
     public CurrentStageNumber: number;
     public WorkflowStages: PromoWorkflowState[];
     public WorkflowLog: WorkflowLog[] = [];
     public Config: Configuration;
     public Evidence: PromoEvidence[] = [];
     protected _state: PromoState;
+    public Approvals: string = "";
 
     constructor(configuration: Configuration) {
         super();
 
-        this.Config = configuration;        
+        this.Config = configuration;
         this.PromoID = this.Config.CountryCode + "--";
         this.Items = [new PromoItem({AdditionalID: this.PromoID + ".1", GetBaseGMSum: this.GetBaseGMSum.bind(this)})];
 
         this.ChangeState(PromoStatus.New);
     }
 
-    public ChangeState(status: PromoStatus):void {        
+    public ChangeState(status: PromoStatus):void {
         switch (status) {
             case PromoStatus.New:
                 this._state = new NewPromoState();
@@ -79,22 +81,22 @@ export class Promo extends Entity {
     }
 
     public Save(entity: Promo): Promise<void>
-    {       
+    {
         return this._state.Save(entity);
     }
 
     public Submit(entity: Promo): Promise<void>
-    {       
+    {
         return this._state.Submit(entity);
     }
 
     public Approve(comments: string): Promise<void>
-    {       
+    {
         return this._state.Approve(comments);
     }
 
     public Reject(comments: string): Promise<void>
-    {       
+    {
         return this._state.Reject(comments);
     }
 
@@ -125,11 +127,11 @@ export class Promo extends Entity {
 
     public GetTotalEstimatedInvestmentAsString(): string {
         const value = this.GetTotalEstimatedInvestment();
-        return value != null ? value.toFixed(2) : "0.00";
+        return value != null ? value.toLocaleString() : "0.00";
     }
 
     public GetROI(): number {
-        //Queda excluída la inversión adicional MKT de los cálculos por estar ya incluída 
+        //Queda excluída la inversión adicional MKT de los cálculos por estar ya incluída
         //en la inversión estimada (lo cual fue un cambio)
         let value: number = 0;
         let incrementalGM: number = 0;

@@ -43,12 +43,20 @@ export class SecurityHelper {
         const date = new Date();
         const config = await ConfigurationRepository.GetInstance();
         const readOnlyGroup = await SecurityHelper.GetGroupByName(config.ReadOnlyGroupName);
+        const ContributeGroup = await SecurityHelper.GetGroupByName(config.KAMsGroupName);
 
         if(readOnlyGroup != null) {
             if(readerIDs == null)
                 readerIDs = [];
 
             readerIDs.push(readOnlyGroup.ItemId);
+        }
+
+        if(ContributeGroup != null) {
+            if(contributorIDs == null)
+            contributorIDs = [];
+
+            contributorIDs.push(ContributeGroup.ItemId);
         }
 
         const data = {

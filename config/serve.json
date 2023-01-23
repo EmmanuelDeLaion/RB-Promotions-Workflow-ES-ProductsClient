@@ -9,19 +9,26 @@
     "sgiovannini": {
       "pageUrl": "https://devbf2019.sharepoint.com/sites/RBPromociones/Mexico/_layouts/workbench.aspx"
     },
+    "neorisDev": {
+      "pageUrl": "https://rbcom.sharepoint.com/sites/TPM_LATAM/Ecuador/_layouts/workbench.aspx"
+    },
     "promoListViewLink": {
-      "pageUrl": "https://sgiovannini.sharepoint.com/sites/RB-Promociones/Mexico/_layouts/workbench.aspx",
-      "fieldCustomizers": {
-        "InternalFieldName": {
-          "id": "e710acda-bc0c-4695-8390-5229e3fc8eaf"
+        "pageUrl": "https://sgiovannini.sharepoint.com/sites/RB-Promociones/Mexico/_layouts/workbench.aspx",
+        "fieldCustomizers": {
+            "InternalFieldName": {
+              // "id": "e710acda-bc0c-4695-8390-5229e3fc8eaf"
+              // "id": "4ed10681-c755-4ed9-adba-c7cbb9d8542a"
+              "id": "afecc168-4f0d-476d-8e75-2782b7257c34"
+            }
         }
-      }
     },
     "promoListViewLink_me": {
       "pageUrl": "https://spme.sharepoint.com/sites/RB-Promociones/Lists/Promotions/AllItems.aspx",
       "fieldCustomizers": {
         "PromoLink": {
-          "id": "e710acda-bc0c-4695-8390-5229e3fc8eaf"
+          // "id": "e710acda-bc0c-4695-8390-5229e3fc8eaf"
+          // "id": "4ed10681-c755-4ed9-adba-c7cbb9d8542a"
+          "id": "afecc168-4f0d-476d-8e75-2782b7257c34"
         }
       }
     }
