@@ -16,6 +16,7 @@ export class ClientProductRepository {
         return entity;
     }*/
 
+
     public static GetById(id: number): Promise<ClientProduct> {
         const entity = sp.web.lists.getByTitle(ClientProductRepository.LIST_NAME)
           .items.getById(id).select(
