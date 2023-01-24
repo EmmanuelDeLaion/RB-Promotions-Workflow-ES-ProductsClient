@@ -53,8 +53,8 @@ export class WorkflowLogRepository {
 
         apr.Approvals.split("|").map((data) => {
             if (Number(data.split("-")[0]) == currentUser.ItemId && !encontrado) {
-                console.log(data);
-                console.log(data.replace(strings.Pending, action));
+                // console.log(data);
+                // console.log(data.replace(strings.Pending, action));
                 if (data.replace(strings.Pending, action) !== data) {
                     aprobadores = concat(aprobadores + data.replace(strings.Pending, action) + "|").toString();
                     encontrado = true;

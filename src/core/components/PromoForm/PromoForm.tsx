@@ -84,16 +84,17 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
       promotionTitle: "",
       hideSavingSpinnerConfirmationDialog: true,
       hideActionConfirmationDialog: true,
+      hideLoading: true,
       enableActionValidation: false,
       hideFileExistsMessageDialog: true,
       CopiarPromo: false,
-      currentUser: ""
+      currentUser: "",
+      canUploadEvidence: false
     };
   }
 
   async GetUser() {
     const user = await SecurityHelper.GetCurrentUser();
-    console.log(user);
     if (user) {
       this.setState({
         currentUser: user.Value
@@ -108,15 +109,45 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
 
   public componentDidMount() {
     this.GetUser();
+
     PromoService.GetViewModel(this.props.itemId).then((viewModel) => {
+
       this.setState({
         isLoading: false,
         enableSubmit: true,
         viewModel: viewModel
       });
+
       this.setState((state, props) => ({
-        CopiarPromo: viewModel.Entity.Client && this.state.currentUser ? (viewModel.Entity.Client.KeyAccountManager.Value == this.state.currentUser ? true : false) : false//(viewModel.Entity.GetStatusText() == "Borrador" ? true : false)
+        CopiarPromo: viewModel.Entity.Client && this.state.currentUser ? (viewModel.Entity.Client.KeyAccountManager.Value == this.state.currentUser ? true : false) : false,//(viewModel.Entity.GetStatusText() == "Borrador" ? true : false)
+        canUploadEvidence:
+          (
+            this.state.viewModel.Entity.GetStatusId() == PromoStatus.Draft ||
+            this.state.viewModel.Entity.GetStatusId() == PromoStatus.Rejected ||
+            this.state.viewModel.Entity.GetStatusId() == PromoStatus.New
+          )
+            && (this.state.viewModel ? this.state.viewModel.ReadOnlyForm : true) == false
+            ?
+            true :
+            (this.state.viewModel.Entity.GetStatusId() == PromoStatus.Approved ? true : false)
       }));
+
+
+      // TODO: Filtra todos los prouctos de cada cliente
+      let newState = this.state as IPromoFormState;
+      if (this.state.viewModel.Entity.Client) {
+        ClientProductRepository.GetAll(this.state.viewModel.Entity.Client.Name).then((products) => {
+          newState.viewModel.ClientProducts = products;
+          this.setState({
+            hideLoading: true
+          });
+        });
+        return newState;
+      }
+
+
+
+
     }).catch((err) => {
       console.error(err);
       this.setState({ formSubmitted: true, isLoading: false, errorMessage: err });
@@ -133,8 +164,6 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
     const subchannel = client ? client.Subchannel : null;
     const selectedItem = entity ? entity.Items[this.state.selectedIndex] : null;
     const readOnlyForm = this.state.viewModel ? this.state.viewModel.ReadOnlyForm : true;
-
-    console.log(entity);
 
 
     let output =
@@ -495,6 +524,7 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
                                       disabled={entity.Client == null} //Test
                                     />
                                   }
+
                                 </Stack>
                                 <Stack className="padding-right controlPadding">
                                   {!readOnlyForm ?
@@ -550,6 +580,7 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
                                       disabled={entity.Client == null} //Test
                                     />
                                   }
+
                                 </Stack>
                                 <Stack className="padding-right controlPadding">
                                   {!readOnlyForm ?
@@ -1188,6 +1219,17 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
                           <Spinner label={strings.Saving} />
                         </div>
                       </Dialog>
+
+                      {/* //TODO Dialog al cargar peticiones */}
+                      <Dialog
+                        hidden={this.state.hideLoading}
+                        dialogContentProps={this.savingSpinnerModalDialogContentProps}
+                        styles={this.confirmationDialogStyles} >
+                        <div>
+                          <Spinner label="Cargando... Por favor espere" />
+                        </div>
+                      </Dialog>
+
                       <Dialog
                         hidden={this.state.hideActionConfirmationDialog}
                         styles={{ main: { width: '450px important!' } }}
@@ -1322,9 +1364,10 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
     });
   }
 
-  private onClientChanged(item: IDropdownOption) { //Test -> item: IDropdownOption
-    console.log(item);
 
+
+
+  private onClientChanged(item: IDropdownOption) {
     const clientId = item.key as number;
 
     this.setState((state) => {
@@ -1336,10 +1379,29 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
       });
     });
 
+    this.setState({
+      hideLoading: false
+    });
+
     ClientRepository.GetById(clientId).then((client) => {
       this.setState((state) => {
         let newState = state as IPromoFormState;
         newState.viewModel.Entity.Client = client;
+        /*Seleccionar el cliente busca la lista del cliente seleccionado
+          Actualiza los productos por el cliente seleccionado
+        */
+        ClientProductRepository.GetAll(this.state.viewModel.Entity.Client.Name).then((products) => {
+          newState.viewModel.ClientProducts = products;
+          state.viewModel.Entity.Items[this.state.selectedIndex].BusinessUnit = null;
+          state.viewModel.Entity.Items[this.state.selectedIndex].Brand = null;
+          state.viewModel.Entity.Items[this.state.selectedIndex].ProductCategory = null;
+          state.viewModel.Entity.Items[this.state.selectedIndex].Category = null;
+
+          this.setState({
+            hideLoading: true
+          });
+
+        });
         return newState;
       });
     });
@@ -1348,10 +1410,12 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
       state.viewModel.Entity.Items[this.state.selectedIndex].ClientProduct = null;
       state.viewModel.Entity.Items[this.state.selectedIndex].Client = item.key ? new LookupValue({
         ItemId: item.key as number,
-        Value: item.text as string
+        Value: item.text
       }) : null;
       return state;
     });
+
+
 
   }
 
@@ -1424,7 +1488,7 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
 
     let toDelete = this.state.viewModel.Entity.Items[this.state.selectedIndex];
 
-    if(!this.arrayPromoItemsDelete.includes(toDelete.ItemId) && toDelete.ItemId !== undefined ){
+    if (!this.arrayPromoItemsDelete.includes(toDelete.ItemId) && toDelete.ItemId !== undefined) {
       this.arrayPromoItemsDelete.push(toDelete.ItemId);
     }
 
@@ -1588,8 +1652,17 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
     const selectedItem = this.state.viewModel.Entity.Items[this.state.selectedIndex];
     let filteredProducts = this.state.viewModel.ClientProducts || [];
 
-    if (selectedItem.Client)
-      filteredProducts = filteredProducts.filter(x => x.Client.ItemId === selectedItem.Client.ItemId);
+    // console.log(this.state.viewModel);
+    // console.log(this.state.viewModel.Entity.Items[this.state.selectedIndex]);
+    // console.log(this.state.viewModel.Entity.Client);
+    // console.log(this.state.viewModel.ClientProducts);
+
+    // Mostrar los productos que tiene un cliente si hay un cliente seleccionado
+    if (this.state.viewModel.Entity.Client == null || this.state.viewModel.Entity.Client == undefined) {
+      filteredProducts = [];
+    } else {
+      filteredProducts = this.state.viewModel.ClientProducts;
+    }
 
     if (selectedItem.BusinessUnit)
       filteredProducts = filteredProducts.filter(x => x.BusinessUnit.ItemId === selectedItem.BusinessUnit.ItemId);
@@ -1599,6 +1672,7 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
 
     if (selectedItem.ProductCategory)
       filteredProducts = filteredProducts.filter(x => x.Category.ItemId === selectedItem.ProductCategory.ItemId);
+
 
     return filteredProducts;
   }
@@ -1642,7 +1716,6 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
     if (this.state.viewModel.Entity.Items[this.state.selectedIndex].BusinessUnit != null)
       filteredBUs.unshift(new LookupValue({ Value: Constants.Miscellaneous.ClearSelectionText }));
 
-    console.log(filteredBUs);
     return filteredBUs;
   }
 
@@ -1735,9 +1808,10 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
     //const product = promoItem.Product;
     const product = promoItem.ClientProduct;
     const skunumber = promoItem.ClientProduct;
+    let clientName = this.state.viewModel.Entity.Client.Name;
 
     if (client && product) {
-      ClientProductRepository.GetByClientAndProduct(client.ItemId, skunumber.SKUNumber).then((item: ClientProduct) => {
+      ClientProductRepository.GetByClientAndProduct(client.ItemId, skunumber.SKUNumber, clientName).then((item: ClientProduct) => {
         promoItem.NetPrice = promoItem.RequiresNetPrice() && item ? item.Price : null;
         promoItem.COGS = item ? item.COGS : null;
 
@@ -1927,6 +2001,7 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
 
   //TODO: save
   private save(): void {
+
     if (!this.validateFormControls()) return;
 
     this.setState({
