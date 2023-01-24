@@ -9,19 +9,22 @@ export interface IPromoFormState {
     formSubmitted: boolean;
     resultIsOK: boolean;
     viewModel?: PromoViewModel;
-    errorMessage?: string; 
+    errorMessage?: string;
     selectedIndex: number;
     loadingTypes: boolean;
     filteredProducts: ClientProduct[];
     actionsComments?: string;
 
+    canUploadEvidence?: boolean;
     evidenceDescription?:string;
     evidenceDate?:Date;
     hasEvidenceValidatioNError?: boolean;
 
+    hideLoading?: boolean;
+
     mainModalOpen: boolean;
     hideDeleteProductDialog: boolean;
-    hideSavingSpinnerConfirmationDialog: boolean;    
+    hideSavingSpinnerConfirmationDialog: boolean;
     hideModalConfirmationDialog: boolean;
     hideActionConfirmationDialog: boolean;
     hideDeleteEvidenceDialog: boolean;

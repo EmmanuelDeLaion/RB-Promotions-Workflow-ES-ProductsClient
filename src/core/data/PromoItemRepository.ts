@@ -13,8 +13,7 @@ import * as strings from 'PromoFormWebPartWebPartStrings';
 export class PromoItemRepository {
   private static LIST_NAME: string = strings.LIST_PromoItems; //Promo items
 
-  public static async GetByPromo(promoId: number, clientId?: number): Promise<PromoItem[]> {
-    console.log(promoId);
+  public static async GetByPromo(promoId: number, clientId?: number, clientName?: string): Promise<PromoItem[]> {
 
     const items = await sp.web.lists.getByTitle(PromoItemRepository.LIST_NAME)
       .items.select(
@@ -41,18 +40,18 @@ export class PromoItemRepository {
         "BaseVolume",
         "EstimatedIncrementalVolume",
         "AdditionalInvestment",
-        "SKUProductId",
+        "SKUProduct",
       ).expand("Type", "BusinessUnit", "Brand", "ProductCategory",).filter(`PromoId eq ${promoId}`).get();
 
-    //TODO: revisar y mejorar este query
     const collection = items.map(async (item) => {
       const category = item.CategoryId ? await CategoryRepository.GetById(item.CategoryId) : null;
-      const clientproduct = item.SKUProductId ? await ClientProductRepository.GetById(item.SKUProductId) : null;
       const volumesLY = clientId && item.ProductId ? await LastYearVolumesRepository.GetByClientAndProduct(clientId, item.ProductId) : null;
+      const clientproduct = await ClientProductRepository.GetByClientAndSKUProduct(item.SKUProduct, clientName);
       return PromoItemRepository.BuildEntity(item, category, clientproduct, volumesLY);
     });
     return Promise.all(collection);
   }
+
 
 
   public static async DeletePromoItemsByPromoID(promoItemsToDelete: any, promoItemId: number): Promise<void> {
@@ -74,7 +73,6 @@ export class PromoItemRepository {
 
     items.map((entity, index) => {
       const number = index + 1;
-      // console.log(entity.Product.ItemId);
       const data = {
         PromoId: promoItemId,
         Title: promoID + "." + number,
@@ -86,7 +84,8 @@ export class PromoItemRepository {
         BusinessUnitId: entity.BusinessUnit ? entity.BusinessUnit.ItemId : null,
         BrandId: entity.Brand ? entity.Brand.ItemId : null,
         ProductCategoryId: entity.ProductCategory ? entity.ProductCategory.ItemId : null,
-        SKUProductId: entity.ClientProduct ? entity.ClientProduct.ItemId : null,
+        // SKUProductId: entity.ClientProduct ? entity.ClientProduct.ItemId : null,
+        SKUProduct: entity.ClientProduct.SKUNumber, // -> Se guarda el SKUNumber del producto
         //Product: entity.GetSKUNumberString(),
         StartDate: entity.StartDate,
         EndDate: entity.EndDate,
@@ -108,18 +107,18 @@ export class PromoItemRepository {
         //ClientId: entity.Client ? entity.Client.ItemId : null,
         //ProductSKU: entity.GetSKUNumberString(),
       };
+
       if (entity.ItemId)
         list.items.getById(entity.ItemId).inBatch(batch).update(data, "*", entityTypeFullName);
       else
         list.items.inBatch(batch).add(data, entityTypeFullName);
     });
-
     await batch.execute();
   }
 
 
 
-  private static BuildEntity(item: any, category?: Category, clientproduct?: ClientProduct, lyVolumes?: LastYearVolumes): PromoItem {
+  private static BuildEntity(item: any, category?: Category, clientproduct?: ClientProduct, lyVolumes?: LastYearVolumes, skunumber?: any, client?: any): PromoItem {
     let entity = new PromoItem();
 
     entity.ItemId = item.ID;
@@ -146,6 +145,7 @@ export class PromoItemRepository {
     entity.AdditionalInvestment = item.AdditionalInvestment;
     entity.LastYearVolumes = lyVolumes;
     //entity.Client = item.Client ? {ItemId: item.Client.ID, Value: item.Client.Title} : null;
+
 
     return entity;
   }

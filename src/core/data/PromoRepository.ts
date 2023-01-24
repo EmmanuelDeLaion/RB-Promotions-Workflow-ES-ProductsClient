@@ -15,8 +15,6 @@ import { WorkflowLogRepository } from "./WorkflowLogRepository";
 export class PromoRepository {
     public static LIST_NAME: string = strings.LIST_Promotions; //Promociones
 
-    //TODO: Revisar el manejo de excepciones y mensajes de error
-    //TODO: Optimizar consulta
     public static async GetById(id: number): Promise<Promo> {
       const item = await sp.web.lists.getByTitle(PromoRepository.LIST_NAME)
         .items.getById(id).select(
@@ -31,16 +29,17 @@ export class PromoRepository {
           "Approvals"
         ).get();
 
-      const items = await PromoItemRepository.GetByPromo(item.ID, item.ClientId);
+
       const client = item.ClientId ? await ClientRepository.GetById(item.ClientId) : null;
+      const items = await PromoItemRepository.GetByPromo(item.ID, item.ClientId, client.Name);
       const workflowLog = await WorkflowLogRepository.GetByPromo(item.ID);
       const evidence = await EvidenceRepository.GetByPromoID(item.Title);
+
 
       return PromoRepository.BuildEntity(item, items, client, workflowLog, evidence);
     }
 
     public static async SaveOrUpdate(entity: Promo, sU: number = 0): Promise<void> {
-      console.log(entity.Items);
 
       const pendingApprovers = entity.GetPendingApproverIDs();
       let aprobadores: any;
@@ -103,8 +102,9 @@ export class PromoRepository {
       await PromoItemRepository.SaveOrUpdateItems(entity.ItemId, entity.PromoID, entity.Items, entity.ItemsToDelete);
     }
 
-    public static async GetNewPromo() : Promise<Promo>
-    {
+
+
+    public static async GetNewPromo() : Promise<Promo>{
       let configuration = await ConfigurationRepository.GetInstance();
       return new Promo(configuration);
     }
