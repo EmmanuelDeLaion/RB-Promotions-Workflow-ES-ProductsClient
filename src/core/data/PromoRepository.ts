@@ -35,9 +35,10 @@ export class PromoRepository {
       const workflowLog = await WorkflowLogRepository.GetByPromo(item.ID);
       const evidence = await EvidenceRepository.GetByPromoID(item.Title);
 
-
       return PromoRepository.BuildEntity(item, items, client, workflowLog, evidence);
     }
+
+
 
     public static async SaveOrUpdate(entity: Promo, sU: number = 0): Promise<void> {
 

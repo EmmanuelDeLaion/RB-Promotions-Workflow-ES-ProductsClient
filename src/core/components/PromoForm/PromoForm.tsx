@@ -61,9 +61,7 @@ const theme = getTheme();
 
 export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState> {
 
-
   arrayPromoItemsDelete: any = [];
-
 
   constructor(props: IPromoFormProps) {
     super(props);
@@ -112,11 +110,25 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
 
     PromoService.GetViewModel(this.props.itemId).then((viewModel) => {
 
+      // TODO: Filtra todos los prouctos de cada cliente
+      if (viewModel.Entity.Client) {
+        ClientProductRepository.GetAll(viewModel.Entity.Client.Name).then((products) => {
+          this.setState((state, props) => {
+            state.viewModel.ClientProducts = products;
+          });
+          this.setState({
+            hideLoading: true
+          });
+        });
+      }
+
+
       this.setState({
         isLoading: false,
         enableSubmit: true,
         viewModel: viewModel
       });
+
 
       this.setState((state, props) => ({
         CopiarPromo: viewModel.Entity.Client && this.state.currentUser ? (viewModel.Entity.Client.KeyAccountManager.Value == this.state.currentUser ? true : false) : false,//(viewModel.Entity.GetStatusText() == "Borrador" ? true : false)
@@ -131,21 +143,6 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
             true :
             (this.state.viewModel.Entity.GetStatusId() == PromoStatus.Approved ? true : false)
       }));
-
-
-      // TODO: Filtra todos los prouctos de cada cliente
-      let newState = this.state as IPromoFormState;
-      if (this.state.viewModel.Entity.Client) {
-        ClientProductRepository.GetAll(this.state.viewModel.Entity.Client.Name).then((products) => {
-          newState.viewModel.ClientProducts = products;
-          this.setState({
-            hideLoading: true
-          });
-        });
-        return newState;
-      }
-
-
 
 
     }).catch((err) => {
@@ -1651,11 +1648,6 @@ export class PromoForm extends React.Component<IPromoFormProps, IPromoFormState>
   private GetFilteredProducts(): ClientProduct[] {
     const selectedItem = this.state.viewModel.Entity.Items[this.state.selectedIndex];
     let filteredProducts = this.state.viewModel.ClientProducts || [];
-
-    // console.log(this.state.viewModel);
-    // console.log(this.state.viewModel.Entity.Items[this.state.selectedIndex]);
-    // console.log(this.state.viewModel.Entity.Client);
-    // console.log(this.state.viewModel.ClientProducts);
 
     // Mostrar los productos que tiene un cliente si hay un cliente seleccionado
     if (this.state.viewModel.Entity.Client == null || this.state.viewModel.Entity.Client == undefined) {
