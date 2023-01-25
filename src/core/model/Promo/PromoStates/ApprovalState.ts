@@ -7,103 +7,109 @@ import { WorkflowLogRepository } from "../../../data/WorkflowLogRepository";
 import { PromoViewModel } from "../PromoViewModel";
 import { PromoState } from "./PromoState";
 import * as strings from 'PromoFormWebPartWebPartStrings';
+import { ClientProductRepository } from '../../../data/ClientProductRepository';
+import { CategoryRepository } from '../../../data/CategoryRepository';
+import { ClientRepository } from '../../../data/ClientRepository';
 
 
 export class ApprovalState extends PromoState {
-    public async Initialize(): Promise<void> {
+  public async Initialize(): Promise<void> {
+    const users = await this.GetCurrentStage().GetPendingUsers();
+
+    await SecurityHelper.SetPromoPermissions(this.Entity.ItemId, [this.Entity.Client.KeyAccountManager.ItemId], this.GetCurrentStage().GetPendingUserIDs());
+
+    await Promise.all(users.map(async (user) => {
+      await NotificacionsManager.SendTaskAssignedNotification(this.Entity, user.Email, null, user.Value);
+    }));
+  }
+
+  public GetStatusId(): number {
+    return PromoStatus.Approval;
+  }
+
+  public GetStatusText(): string {
+    return Constants.StatusTexts.Approval;
+  }
+
+  public async GetViewModel(): Promise<PromoViewModel> {
+    let viewModel = new PromoViewModel(this.Entity);
+
+    // TODO: Collections
+    viewModel.Clients = await ClientRepository.GetClients();
+    viewModel.Categories = await CategoryRepository.GetAll();
+    viewModel.ClientProducts = await ClientProductRepository.GetAll();
+
+    viewModel.ReadOnlyForm = true;
+
+    const currentUser = await SecurityHelper.GetCurrentUser();
+
+    if (this.GetCurrentStage().UserCanApprove(currentUser.ItemId)) {
+      viewModel.ShowApproveButton = true;
+      viewModel.ShowRejectButton = true;
+    }
+
+    return viewModel;
+  }
+
+  public async Approve(comments: string): Promise<void> {
+    const stage = this.GetCurrentStage();
+    const user = await SecurityHelper.GetCurrentUser();
+    const kam = await SecurityHelper.GetUserById(this.Entity.Client.KeyAccountManager.ItemId);
+
+    stage.AddToCompletBy(user.ItemId);
+
+    if (stage.IsComplete()) {
+      if (this.Entity.CurrentStageNumber == this.Entity.WorkflowStages.length) {
+        this.Entity.ChangeState(PromoStatus.Approved);
+
+        const to = kam.Email;
+
+        NotificacionsManager.SendWorkflowApprovedNotification(this.Entity, to);
+      }
+      else {
+        this.Entity.CurrentStageNumber++;
         const users = await this.GetCurrentStage().GetPendingUsers();
 
-        await SecurityHelper.SetPromoPermissions(this.Entity.ItemId, [this.Entity.Client.KeyAccountManager.ItemId], this.GetCurrentStage().GetPendingUserIDs());
-
-        await Promise.all(users.map(async (user) => {
-            await NotificacionsManager.SendTaskAssignedNotification(this.Entity, user.Email, null, user.Value);
+        await Promise.all(users.map(async (usr) => {
+          await NotificacionsManager.SendTaskAssignedNotification(this.Entity, usr.Email, null, usr.Value);
         }));
+      }
     }
 
-    public GetStatusId(): number {
-        return PromoStatus.Approval;
-    }
+    let readerIDs = [this.Entity.Client.KeyAccountManager.ItemId];
 
-    public GetStatusText(): string {
-        return Constants.StatusTexts.Approval;
-    }
+    for (let i = 0; i < this.Entity.CurrentStageNumber; i++)
+      readerIDs = readerIDs.concat(this.Entity.WorkflowStages[i].CompletedBy);
 
-    public async GetViewModel(): Promise<PromoViewModel> {
-        let viewModel = new PromoViewModel(this.Entity);
+    await SecurityHelper.SetPromoPermissions(this.Entity.ItemId, readerIDs, this.GetCurrentStage().GetPendingUserIDs());
+    await PromoRepository.SaveOrUpdate(this.Entity, 1);
+    await WorkflowLogRepository.Save(this.Entity.ItemId, this.Entity.PromoID, strings.Approve, comments, this.Entity);
 
-        viewModel.ReadOnlyForm = true;
+    return NotificacionsManager.SendTaskApprovedNotification(this.Entity, user.Value, kam.Email);
+  }
 
-        const currentUser = await SecurityHelper.GetCurrentUser();
+  public async Reject(comments: string): Promise<void> {
+    const stage = this.GetCurrentStage();
+    const user = await SecurityHelper.GetCurrentUser();
 
-        if(this.GetCurrentStage().UserCanApprove(currentUser.ItemId)){
-            viewModel.ShowApproveButton = true;
-            viewModel.ShowRejectButton = true;
-        }
+    this.Entity.ChangeState(PromoStatus.Rejected);
 
-        return viewModel;
-    }
+    stage.AddToCompletBy(user.ItemId);
 
-    public async Approve(comments: string): Promise<void>
-    {
-        const stage = this.GetCurrentStage();
-        const user = await SecurityHelper.GetCurrentUser();
-        const kam = await SecurityHelper.GetUserById(this.Entity.Client.KeyAccountManager.ItemId);
+    await PromoRepository.SaveOrUpdate(this.Entity, 1);
+    await WorkflowLogRepository.Save(this.Entity.ItemId, this.Entity.PromoID, strings.Reject, comments, this.Entity);
 
-        stage.AddToCompletBy(user.ItemId);
+    let readerIDs = [this.Entity.Client.KeyAccountManager.ItemId];
 
-        if(stage.IsComplete()) {
-            if(this.Entity.CurrentStageNumber == this.Entity.WorkflowStages.length) {
-                this.Entity.ChangeState(PromoStatus.Approved);
+    for (let i = 0; i < this.Entity.CurrentStageNumber; i++)
+      readerIDs = readerIDs.concat(this.Entity.WorkflowStages[i].CompletedBy);
 
-                const to = kam.Email;
+    readerIDs = readerIDs.concat(stage.GetPendingUserIDs());
 
-                NotificacionsManager.SendWorkflowApprovedNotification(this.Entity, to);
-            }
-            else {
-                this.Entity.CurrentStageNumber++;
-                const users = await this.GetCurrentStage().GetPendingUsers();
+    await SecurityHelper.SetPromoPermissions(this.Entity.ItemId, readerIDs);
 
-                await Promise.all(users.map(async (usr) => {
-                    await NotificacionsManager.SendTaskAssignedNotification(this.Entity, usr.Email, null, usr.Value);
-                }));
-            }
-        }
+    const to = (await SecurityHelper.GetUserById(this.Entity.Client.KeyAccountManager.ItemId)).Email;
 
-        let readerIDs = [this.Entity.Client.KeyAccountManager.ItemId];
-
-        for(let i = 0; i < this.Entity.CurrentStageNumber; i++)
-            readerIDs = readerIDs.concat(this.Entity.WorkflowStages[i].CompletedBy);
-
-        await SecurityHelper.SetPromoPermissions(this.Entity.ItemId, readerIDs, this.GetCurrentStage().GetPendingUserIDs());
-        await PromoRepository.SaveOrUpdate(this.Entity, 1);
-        await WorkflowLogRepository.Save(this.Entity.ItemId, this.Entity.PromoID, strings.Approve, comments, this.Entity);
-
-        return NotificacionsManager.SendTaskApprovedNotification(this.Entity, user.Value, kam.Email);
-    }
-
-    public async Reject(comments: string): Promise<void>
-    {
-        const stage = this.GetCurrentStage();
-        const user = await SecurityHelper.GetCurrentUser();
-
-        this.Entity.ChangeState(PromoStatus.Rejected);
-
-        stage.AddToCompletBy(user.ItemId);
-
-        await PromoRepository.SaveOrUpdate(this.Entity, 1);
-        await WorkflowLogRepository.Save(this.Entity.ItemId, this.Entity.PromoID, strings.Reject, comments, this.Entity);
-
-        let readerIDs = [this.Entity.Client.KeyAccountManager.ItemId];
-
-        for(let i = 0; i < this.Entity.CurrentStageNumber; i++)
-            readerIDs = readerIDs.concat(this.Entity.WorkflowStages[i].CompletedBy);
-
-        readerIDs = readerIDs.concat(stage.GetPendingUserIDs());
-
-        await SecurityHelper.SetPromoPermissions(this.Entity.ItemId, readerIDs);
-
-        const to = (await SecurityHelper.GetUserById(this.Entity.Client.KeyAccountManager.ItemId)).Email;
-
-        return NotificacionsManager.SendTaskRejectedNotification(this.Entity, comments, user.Value, to);
-    }
+    return NotificacionsManager.SendTaskRejectedNotification(this.Entity, comments, user.Value, to);
+  }
 }
